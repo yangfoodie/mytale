@@ -9,10 +9,24 @@ if not exist "%RAR%" echo 【错误】您电脑上没有安装WinRAR，无法使
 
 rem 对war包进行处理
 for %%a in (*.war) do (
+	rem 一个文件一个文件处理
+	rem 第一步：解压war包中的一个文件到当前目录
+	rem 第二步：替换当前目录的jar包中的一个文件
+	rem 第三步：将当前目录的jar替换到war包中，同时删除解压的文件
     echo 正在处理 "%%~a"
 	"%RAR%" e "%%~a" test1.jar -ibck
 	"%RAR%" a test1.jar properties.properties -ibck
 	"%RAR%" m "%%~a" test1.jar -ibck
+	echo 处理完成 "%%~a"
+	
+	rem 对含有子目录里的文件处理
+	rem 第一步：解压war包中指定目录下的文件到当前目录
+	rem 第一步：替换解压后文件里的配置文件
+	rem 第三步：替换指定目录下的文件，同时会删除解压的文件，但是目录不会删除
+	echo 正在处理 "%%~a"
+	"%RAR%" x "%%~a" test\tt.jar .\ -ibck
+	"%RAR%" a .\test\tt.jar properties.properties -ibck
+	"%RAR%" m "%%~a" .\test\tt.jar -ibck
 	echo 处理完成 "%%~a"
 )
 
