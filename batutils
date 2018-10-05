@@ -1,0 +1,20 @@
+@echo off & title 压缩文件内部文件替换工具
+
+rem 设置压缩文件软件
+set RAR=D:\ruanjian\WinRAR\WinRAR.exe
+set file=null
+
+rem 判断本机有没有安装压缩软件
+if not exist "%RAR%" echo 【错误】您电脑上没有安装WinRAR，无法使用本程序&echo.&echo 按任意键退出...&pause>nul&exit;
+
+rem 对war包进行处理
+for %%a in (*.war) do (
+    echo 正在处理 "%%~a"
+	"%RAR%" e "%%~a" test1.jar -ibck
+	"%RAR%" a test1.jar properties.properties -ibck
+	"%RAR%" m "%%~a" test1.jar -ibck
+	echo 处理完成 "%%~a"
+)
+
+pause
+
